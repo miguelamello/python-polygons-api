@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_mongoengine import MongoEngine
 from flask_restful import Resource, Api
+from flask.json import JSONEncoder
 from marshmallow import Schema, fields, ValidationError
 from resources import ProviderResource, ServiceAreaResource, PolygonLookupResource
 from appconfig import env
