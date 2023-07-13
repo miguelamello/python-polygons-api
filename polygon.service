@@ -19,7 +19,7 @@ Group=ec2-user
 WorkingDirectory=/home/ec2-user/polygon
 Environment=PATH=/usr/local/bin:/usr/bin:/bin
 Environment=NODE_ENV=production
-ExecStart=/home/ec2-user/polygon/source/manage.py runserver 0.0.0.0:8000
+ExecStart=/home/ec2-user/.local/bin/gunicorn -w 2 'main:app'
 Restart=always
 
 [Install]
