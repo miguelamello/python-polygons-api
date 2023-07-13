@@ -1,2 +1,0 @@
-#!/bin/sh
-/home/miguelgunicorn -w 2 'main:app'

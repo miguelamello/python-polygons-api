@@ -1,2 +1,0 @@
-#!/bin/sh
-#/home/miguel/.local/bin/gunicorn -w 2 'main:app'

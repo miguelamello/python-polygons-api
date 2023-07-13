@@ -1,6 +1,5 @@
 .venv
-#.history
-#.vscode
-#.env
-#global-bundle.pem
+.history
+.vscode
+global-bundle.pem
 
