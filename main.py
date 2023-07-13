@@ -3,14 +3,12 @@ from flask_mongoengine import MongoEngine
 from flask_restful import Resource, Api
 from marshmallow import Schema, fields, ValidationError
 from resources import ProviderResource, ServiceAreaResource, PolygonLookupResource
-from dotenv import load_dotenv
-import os
+from appconfig import env
 
 app = Flask(__name__)
 
 # Database configuration
-load_dotenv('.env')
-app.config['MONGODB_SETTINGS'] = {'host': os.getenv('DB_HOST')}
+app.config['MONGODB_SETTINGS'] = { 'host': env['mongo_host'] }
  
 # Initialize database and API routes
 db = MongoEngine()
