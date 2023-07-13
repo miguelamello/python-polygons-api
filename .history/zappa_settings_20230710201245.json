@@ -1,0 +1,14 @@
+{
+  "dev": false,
+  "django_settings": "polygon/settings.py",
+  "aws_region": "sa-east-1",
+  "profile_name": "~/.aws/config",
+  "project_name": "polygon",
+  "runtime": "python3.9",
+  "memory_size": 256,
+  "timeout_seconds": 30,
+  "environment_variables": {
+    "SECRET_KEY": "secret-key",
+    "DEBUG": "false"
+  }
+}

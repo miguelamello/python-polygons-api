@@ -1,0 +1,29 @@
+#
+# Systemd service configuration file for the polygon service. 
+# Under Unix/Linux servers that use Systemd, it's a great 
+# way to configure the service.
+# 
+# Usage: 
+# systemdctl status polygon
+# systemdctl start polygon
+# systemdctl stop polygon
+# systemdctl restart polygon
+#
+
+[Unit]
+Description=polygon
+
+[Service] 
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/polygon
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=NODE_ENV=production
+ExecStart=/usr/local/bin/gunicorn -w 2 'main:app'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+
+

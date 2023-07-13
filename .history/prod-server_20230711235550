@@ -1,0 +1,2 @@
+#!/bin/sh
+/homegunicorn -w 2 'main:app'
