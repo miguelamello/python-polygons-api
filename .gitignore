@@ -3,5 +3,5 @@
 .vscode
 dev-server
 env-activate
-global-bundle.pem
+#global-bundle.pem
 
