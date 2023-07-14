@@ -23,8 +23,6 @@ api.add_resource(ServiceAreaResource, '/service-area','/service-area/<string:ser
 api.add_resource(PolygonLookupResource, '/polygons')
 
 # Handler for unhandled exceptions
-
-
 @app.errorhandler(Exception)
 def handle_exception(e):
     # Return the JSON response with the 500 status code
