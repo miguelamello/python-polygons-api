@@ -1,7 +1,6 @@
 .venv
 .history
 .vscode
-dev-server
-env-activate
+#env-activate
 #global-bundle.pem
 
