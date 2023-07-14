@@ -25,8 +25,9 @@ def handle_exception(e):
     return jsonify(error=str(e)), 500
 
 # Route for API documentation
-
-
 @app.route("/")
 def hello_world():
     return "Polygon API"
+
+if __name__ == '__main__':
+    app.run(port=8000)
