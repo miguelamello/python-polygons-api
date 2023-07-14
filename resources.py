@@ -126,7 +126,9 @@ class ServiceAreaResource(Resource):
         # Verify if provider entries already exists
         # Exit if any of the entries already exists
         coordinates = data['geopos']['coordinates']
-        if ServiceArea.objects(geopos=coordinates).first():
+        existing_document = ServiceArea.objects(geopos=coordinates).first()
+        print(existing_document)
+        if existing_document:
             return {'error': 'Service Area with the same geoposition already exists'}, 400
         
         # Create provider
