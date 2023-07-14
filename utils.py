@@ -26,13 +26,13 @@ class Utils:
         if data.get('phone') == None:
             return {'error': 'Phone is required'}, 400
 
-        if len(data['name'].strip()) == 0:
+        if len(str(data['name']).strip()) == 0:
             return {'error': 'Name can not be empty'}, 400
 
-        if len(data['email'].strip()) == 0:
+        if len(str(data['email']).strip()) == 0:
             return {'error': 'Email can not be empty'}, 400
 
-        if len(data['phone'].strip()) == 0:
+        if len(str(data['phone']).strip()) == 0:
             return {'error': 'Phone can not be empty'}, 400
 
         return True
@@ -40,19 +40,19 @@ class Utils:
     # Format provider payload data to expected syntax
     def formatProviderPayload(data):
         if data['name']:
-            data['name'] = data['name'].strip().title()
+            data['name'] = str(data['name']).strip().title()
 
         if data['email']:
-            data['email'] = data['email'].strip().lower()
+            data['email'] = str(data['email']).strip().lower()
 
         if data['phone']:
-            data['phone'] = Utils.toNumber(data['phone'].strip())
+            data['phone'] = Utils.toNumber(str(data['phone']).strip())
 
         if data['language']:
-            data['language'] = data['language'].strip().title()
+            data['language'] = str(data['language']).strip().title()
 
         if data['currency']:
-            data['currency'] = data['currency'].strip().upper()
+            data['currency'] = str(data['currency']).strip().upper()
 
         return data
 
@@ -80,7 +80,7 @@ class Utils:
         if data.get('provider') == None:
             return {'error': 'Provider ID is required'}, 400
 
-        if len(data['name'].strip()) == 0:
+        if len(str(data['name']).strip()) == 0:
             return {'error': 'Name can not be empty'}, 400
 
         if len(str(data['price']).strip()) == 0:
@@ -100,7 +100,7 @@ class Utils:
         if len(data['geopos']['coordinates']) != 2:
             return {'error': 'Geoposition Coordinates should be latitude and longitude'}, 400
 
-        if len(data['provider'].strip()) != 24:
+        if len(str(data['provider']).strip()) != 24:
             return {'error': 'Provider should be an ID of 24 characters in length'}, 400
 
         return True
