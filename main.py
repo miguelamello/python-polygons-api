@@ -8,11 +8,7 @@ from appconfig import env
 app = Flask(__name__)
 
 # Database configuration
-app.config['MONGODB_SETTINGS'] = { 
-    'db': env['mongo_db'],
-    'name': env['mongo_db'],
-    'host': env['mongo_host'] 
-}
+app.config['MONGODB_SETTINGS'] = { 'host': env['mongo_host'] }
  
 # Initialize database and API routes
 db = MongoEngine()
