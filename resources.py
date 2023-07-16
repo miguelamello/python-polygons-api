@@ -4,8 +4,7 @@ from marshmallow import ValidationError
 from mongoengine.errors import ValidationError, DoesNotExist
 from models import Provider, ServiceArea
 from utils import Utils
-import json, re, math
-from decimal import Decimal, ROUND_HALF_EVEN
+import json
 
 class ProviderResource(Resource):
     def get(self, provider_id):

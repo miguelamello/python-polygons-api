@@ -1,6 +1,5 @@
 import re
 from bson import ObjectId
-from decimal import Decimal, ROUND_HALF_EVEN
 
 class Utils:
     # Email format validation using regular expressions
