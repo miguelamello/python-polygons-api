@@ -1,4 +1,4 @@
-from mongoengine import Document, StringField, EmailField, FloatField, PointField, ReferenceField
+from mongoengine import Document, StringField, EmailField, FloatField, PolygonField, ReferenceField
 
 
 class Provider(Document):
@@ -12,5 +12,5 @@ class Provider(Document):
 class ServiceArea(Document):
     name = StringField(required=True)
     price = FloatField(required=True)
-    geopos = PointField(required=True)
+    vertices = PolygonField(required=True)
     provider = ReferenceField(Provider)
