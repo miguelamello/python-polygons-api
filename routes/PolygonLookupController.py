@@ -65,6 +65,8 @@ class PolygonLookupController(Resource):
                     #'provider': provider.name,
                     'price': polygon.price
                 })
+        except:
+            pass
 
         return result
 
