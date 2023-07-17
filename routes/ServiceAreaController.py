@@ -4,14 +4,15 @@ from marshmallow import ValidationError
 from mongoengine.errors import ValidationError, DoesNotExist
 from models.Provider import Provider
 from models.ServiceArea import ServiceArea
-from library.Utils import Utils
+from services.Utils import Utils
 from decorators.api_key_required import api_key_required
+from services.Redis import Redis
 from routes.PolygonLookupController import PolygonLookupController
-import json, redis
+import json
 from appconfig import env
 
-# Redis connection
-r = redis.Redis(host=env['redis_host'], port=6379, db=0)
+# Redis Service
+redis = Redis()
 
 # Service Area Controller
 class ServiceAreaController(Resource):
@@ -22,7 +23,7 @@ class ServiceAreaController(Resource):
         # Otherwise, retrieve the data from the database
         # If error occurs, bypass the cache
         try:
-            cached_data = r.get(service_area_id)
+            cached_data = redis.get_data(service_area_id)
             if cached_data:
                 return json.loads(cached_data)
         except:
@@ -34,7 +35,7 @@ class ServiceAreaController(Resource):
             # Set expiration time to 1 hour
             # If error occurs, bypass the cache
             try:
-                r.setex(service_area_id, env['redis_ttl'], service_area.to_json())
+                redis.set_data(service_area_id, service_area.to_json(), env['redis_ttl'])
             except:
                 pass
             return json.loads(service_area.to_json())
@@ -128,7 +129,7 @@ class ServiceAreaController(Resource):
             # If error occurs, bypass the cache
             try:
                 data['provider'] = str(data['provider'])
-                r.setex(service_area_id, env['redis_ttl'], json.dumps(data))
+                redis.set_data(service_area_id, json.dumps(data), env['redis_ttl'])
             except:
                 pass
             return {'message': 'Service Area ' + service_area_id + ' updated successfully'}
@@ -143,7 +144,7 @@ class ServiceAreaController(Resource):
             service_area = ServiceArea.objects.get(id=service_area_id)
             # Delete the key from cache
             try:
-                r.delete(service_area_id)
+                redis.delete_data(service_area_id)
             except:
                 pass
         except DoesNotExist:

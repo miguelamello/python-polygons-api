@@ -4,7 +4,7 @@ from marshmallow import ValidationError
 from mongoengine.errors import ValidationError, DoesNotExist
 from models.Provider import Provider
 from models.ServiceArea import ServiceArea
-from library.Utils import Utils
+from services.Utils import Utils
 from decorators.api_key_required import api_key_required
 import json, redis
 from appconfig import env

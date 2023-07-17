@@ -4,13 +4,14 @@ from marshmallow import ValidationError
 from mongoengine.errors import ValidationError, DoesNotExist
 from models.Provider import Provider
 from models.ServiceArea import ServiceArea
-from library.Utils import Utils
+from services.Utils import Utils
 from decorators.api_key_required import api_key_required
-import json, redis
+from services.Redis import Redis
+import json
 from appconfig import env
 
-# Redis connection
-r = redis.Redis(host=env['redis_host'], port=6379, db=0)
+# Redis Service
+redis = Redis()
 
 # Provider Controller
 class ProviderController(Resource):
@@ -21,7 +22,7 @@ class ProviderController(Resource):
         # Otherwise, retrieve the data from the database
         # If error occurs, bypass the cache
         try:
-            cached_data = r.get(provider_id)
+            cached_data = redis.get_data(provider_id)
             if cached_data:
                 return json.loads(cached_data)
         except:
@@ -34,7 +35,7 @@ class ProviderController(Resource):
             # Set expiration time to 1 hour
             # If error occurs, bypass the cache
             try:
-                r.setex(provider_id, env['redis_ttl'], provider.to_json())
+                redis.set_data(provider_id, provider.to_json(), env['redis_ttl'])
             except:
                 pass
             return json.loads(provider.to_json())
@@ -108,7 +109,7 @@ class ProviderController(Resource):
             # Set expiration time to 1 hour
             # If error occurs, bypass the cache
             try:
-                r.setex(provider_id, env['redis_ttl'], json.dumps(data))
+                redis.set_data(provider_id, json.dumps(data), env['redis_ttl'])
             except:
                 pass
             return {'message': 'Provider ' + provider_id + ' updated successfully'}
@@ -131,7 +132,7 @@ class ProviderController(Resource):
             ServiceArea.objects(provider=provider_id).delete()
             # Delete the key from cache
             try:
-                r.delete(provider_id)
+                redis.delete_data(provider_id)
             except:
                 pass
             return {'message': 'Provider ' + provider_id + ' deleted successfully'}
