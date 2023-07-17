@@ -55,12 +55,12 @@ class PolygonLookupController(Resource):
         result = []
         for polygon in polygons:
             # Retrieve the associated provider information
-            provider = Provider.objects.get(id=polygon.provider.id)
+            #provider = Provider.objects.get(id=polygon.provider.id)
             
             # Append the result
             result.append({
                 'name': polygon.name,
-                'provider': provider.name,
+                #'provider': provider.name,
                 'price': polygon.price
             })
 
