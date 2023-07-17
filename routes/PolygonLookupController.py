@@ -50,7 +50,7 @@ class PolygonLookupController(Resource):
             } 
         }
         
-        #polygons = ServiceArea.objects(__raw__=raw_query).order_by('name')
+        polygons = ServiceArea.objects(__raw__=raw_query).order_by('name')
         
         result = []
         
