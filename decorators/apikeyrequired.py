@@ -1,8 +1,9 @@
 from functools import wraps
 from flask import request
+from appconfig import env
 
 # API-KEYS
-API_KEYS = [ 'BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS' ]
+API_KEYS = [ env['api-key'] ]
 
 
 def api_key_required(func):

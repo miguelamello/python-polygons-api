@@ -127,6 +127,7 @@ class ProviderResource(Resource):
 
         try:
             Provider.objects(id=provider_id).delete()
+            ServiceArea.objects(provider=provider_id).delete()
             # Delete the key from cache
             try:
                 r.delete(provider_id)
