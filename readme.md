@@ -4,7 +4,7 @@
 The goal of this project is to develop a robust RESTful API to support shuttle companies in providing their services. One of the challenges faced by shuttle companies is the lack of precise location information, such as zip codes or cities they serve. To overcome this challenge, the project aims to introduce a solution that allows shuttle companies to define custom polygons as their service areas. This approach empowers shuttle company staff to independently define and modify their service areas, allowing them to attribute a fixed price to each polygon.
 
 ## API Documentation
-API Documentation is available at `http://18.230.150.109/polygons`
+API Documentation is available at http://18.230.150.109/polygons
 
 ## Project Objectives
 
@@ -39,5 +39,50 @@ The project uses a set of technologies to achieve the objectives described above
 **AWS Linux:** The project uses AWS Linux as the operating system for the RESTful API. AWS Linux is a popular choice for hosting RESTful APIs due to its scalability and reliability. Additionally, AWS Linux provides a high level of control over the hosting environment, allowing developers to customize the environment as needed. AWS Linux is based on Red Hat Enterprise Linux (RHEL), which is a popular choice for hosting RESTful APIs due to its stability and reliability. 
 
 **AWS ElastiCache:** The project uses AWS ElastiCache to cache the service areas and pricing information. AWS ElastiCache is a popular choice for caching data due to its scalability and reliability. Additionally, AWS ElastiCache provides a high level of control over the caching environment, allowing developers to customize the environment as needed. AWS ElastiCache allows scalling up and down the resources as needed, for example, to handle a high volume of requests. If needed, horizontal scaling can be implemented by adding as many as ElastiCache instances necessary to handle the load.
+
+## Architecture and Design
+
+The project is designed to achieve the objectives described above. The following sections provide an overview of the architecture and design of the project.
+
+**1) RESTful API:** The project uses a RESTful API to enable shuttle companies to interact with the system and manage their service areas efficiently. The RESTful API is built using the Flask framework and hosted on AWS EC2. The RESTful API provides the following endpoints:
+
+  - POST    /provider
+  - GET     /provider/{id}
+  - PUT     /provider/{id}
+  - DELETE  /provider/{id}
+  - GET     /provider/service-areas/{id}
+  - DELETE  /provider/service-areas/{id}
+  - POST    /service-area
+  - GET     /service-area/{id}
+  - PUT     /service-area/{id}
+  - DELETE  /service-area/{id}
+  - GET     /lookup?{longitude}&{latitude}
+
+**2) Polygon Definition:** The project uses a polygon definition to enable shuttle company staff to define custom polygons as their service areas. The polygon definition is implemented using the GeoJSON format. The GeoJSON format is a popular choice for defining custom polygons due to its simplicity and ease of use. Additionally, the GeoJSON format is supported by a wide range of tools and libraries, making it easy to integrate with existing systems. 
+
+Take this example document:
+
+```
+{
+  name: 'Chinatown',
+  price: 7.42,
+  vertices: {
+    type: 'Polygon',
+    coordinates: [
+      [
+        [ -73.9999, 40.7191 ],
+        [ -73.9944, 40.7191 ],
+        [ -73.9944, 40.7131 ],
+        [ -73.9999, 40.7131 ],
+        [ -73.9999, 40.7191 ]
+      ]
+    ]
+  }  
+}
+
+```
+
+Vertices is a GeoJSON object that defines the polygon. The polygon is defined as a set of coordinates that form a closed loop. The coordinates are specified as an array of arrays, where each array represents a point on the polygon. The first and last points must be the same to form a closed loop. The coordinates are specified in longitude and latitude format, where longitude comes first and latitude second. The GeoJSON format can be used by software developers to draw the polygon on a map or to calculate the area of the polygon. The usecases are endless.
+
 
 
