@@ -2,6 +2,7 @@
 .history
 .vscode
 __pycache__/
+repos
 appconfig.py
 env-activate
 global-bundle.pem
