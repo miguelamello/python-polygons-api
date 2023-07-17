@@ -1,5 +1,6 @@
 from mongoengine import Document, StringField, EmailField, FloatField, PolygonField, ReferenceField
 import json
+from models.Provider import Provider
 
 
 class ServiceArea(Document):

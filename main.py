@@ -24,10 +24,10 @@ api.add_resource(ServiceAreaController, '/polygons/service-area', '/polygons/ser
 api.add_resource(PolygonLookupController, '/polygons/lookup')
 
 # Handler for unhandled exceptions
-@app.errorhandler(Exception)
+'''@app.errorhandler(Exception)
 def handle_exception(e):
     # Return the JSON response with the 500 status code
-    return jsonify(error=str(e)), 500
+    return jsonify(error=str(e)), 500'''
 
 @app.route("/")
 def index():

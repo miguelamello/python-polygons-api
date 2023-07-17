@@ -2,9 +2,11 @@ from flask import request
 from flask_restful import Resource
 from marshmallow import ValidationError
 from mongoengine.errors import ValidationError, DoesNotExist
-from models import *
-from library import Utils
+from models.Provider import Provider
+from models.ServiceArea import ServiceArea
+from library.Utils import Utils
 from decorators.api_key_required import api_key_required
+from routes.PolygonLookupController import PolygonLookupController
 import json, redis
 from appconfig import env
 
@@ -60,7 +62,7 @@ class ServiceAreaController(Resource):
      
         # Verify if the polygon already exists for the provider
         # Exit if already exists
-        polygon_lookup = PolygonLookupResource()
+        polygon_lookup = PolygonLookupController()
         result = polygon_lookup.findPolygonProvider(data['vertices']['coordinates'], data['provider'])
         if len(result):
             if result[0].provider.id == data['provider']:
