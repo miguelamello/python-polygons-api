@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polygons Reference</title>
+  <link rel="stylesheet" href="/static/index.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="/static/favicon_io/site.webmanifest">
+</head>
+<body>
+  
+  <h1>Polygons API</h1>
+  <p>Version 1.0</p>
+  <p><br></p>
+  <h2>1) Introduction</h2>
+  <p>The goal of this project is to develop a robust RESTful API to support shuttle companies in providing their services.
+    One of the challenges faced by shuttle companies is the lack of precise location information, such as zip codes or
+    cities they serve. To overcome this challenge, the project aims to introduce a solution that allows shuttle companies
+    to define custom polygons as their service areas. This approach empowers shuttle company staff to independently define
+    and modify their service areas, allowing them to attribute a fixed price to each polygon.</p>
+  <p><br></p>
+  <h2>2) Authentication</h2>
+  <p>The API uses a &ldquo;api-key&rdquo; authentication. To authenticate requests, include the &ldquo;api-key&rdquo; in
+    HTTP Header of the request. For now, you can use the default api-key.<br><br></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><br></p>
+  <p>If api-key is missing in the HTTP Headers or is miswrite, the API will return an error message and will not allow client to proceed.<br><br></p>
+  <pre>
+  {
+    &quot;message&quot;: &quot;Invalid API key. See documentation.&quot;
+  }</pre>
+  <p><br></p>
+  <h2>3) Base URL</h2>
+  <p>Polygons API can be accessed through the base url below.<br><br></p>
+  <pre>http://18.230.150.109/polygons/</pre>
+  <p>Accessing the base url will show the API Documentation by default.</p>
+  <p><br></p>
+  <h2>4) Routes</h2>
+  <p>Polygons API offers the routes listed below.</p>
+  <pre>
+  POST    /provider
+  GET     /provider/{id}
+  PUT     /provider/{id}
+  DELETE  /provider/{id}
+  GET     /provider/service-areas/{id}
+  DELETE  /provider/service-areas/{id}
+  POST    /service-area
+  GET     /service-area/{id}
+  PUT     /service-area/{id}
+  DELETE  /service-area/{id}
+  GET     /polygons</pre>
+  <p><br></p>
+  <p><strong>4.1) Create a provider</strong></p>
+  <p><strong>Endpoint:</strong> /provider</p>
+  <p><strong>Method:</strong> POST</p>
+  <p><strong>Description:</strong> This route creates a new provider. A provider needs to be created before, since service
+    areas must be indexed to a provider.</p>
+  <p><strong>Parameters:</strong> None</p>
+  <p><strong>Request Body:</strong> A JSON Literal containing the required fields.</p>
+  <pre>
+  {
+    &quot;name&quot;: &quot;Xyz Corporation&quot;,
+    &quot;email&quot;: &quot;<a data-fr-linked="true" href="mailto:xyz@example.com">xyz@example.com</a>&quot;,
+    &quot;phone&quot;: &quot;0987654321&quot;,
+    &quot;language&quot;: &quot;Spanish&quot;,
+    &quot;currency&quot;: &quot;EUR&quot;
+  }</pre>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>
+  {
+    &quot;message&quot;: &quot;Provider created successfully&quot;,
+    &quot;id&quot;: &quot;64b44fbb1debccf440c8ef89&quot;
+  }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+  curl -X POST \
+  'http://127.0.0.1:8000/polygons/provider' \
+  --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS' \
+  --header 'Content-Type: application/json' \
+  --data-raw ' {
+    "name": "MMM Shuttle",
+    "email": "info@mmmshuttle.com",
+    "phone": "037847228",
+    "language": "English",
+    "currency": "USD"
+  }'</pre>
+  <p><br></p>
+  <p><strong>4.2) Get a provider</strong></p>
+  <p><strong>Endpoint:</strong> /provider/{id}</p>
+  <p><strong>Method:</strong> GET</p>
+  <p><strong>Description:</strong> This route returns information about the provider.</p>
+  <p><strong>Parameters:</strong> {id} (path parameter): string - ID of the provider in the database.</p>
+  <p><strong>Request Body:</strong> None</p>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>
+  {
+    &quot;_id&quot;: &quot;64ae9964a4f893aa79954558&quot;,
+    &quot;name&quot;: &quot;Xyz Corporation&quot;,
+    &quot;email&quot;: &quot;<a data-fr-linked="true" href="mailto:xyz@example.com">xyz@example.com</a>&quot;,
+    &quot;phone&quot;: &quot;0987654321&quot;,
+    &quot;language&quot;: &quot;Spanish&quot;,
+    &quot;currency&quot;: &quot;EUR&quot;
+  }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+    curl -X GET \
+    'http://127.0.0.1:8000/polygons/provider/64ae9932a4f893aa79954553' \
+    --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
+  <p><br></p>
+  <p><strong>4.3) Update a provider</strong></p>
+  <p><strong>Endpoint:</strong> /provider/{id}</p>
+  <p><strong>Method:</strong> PUT</p>
+  <p><strong>Description:</strong> This route update the provider&apos;s data.</p>
+  <p><strong>Parameters:</strong> {id} (path parameter): string - ID of the provider in the database.</p>
+  <p><strong>Request Body:</strong> A JSON Literal containing the required fields.</p>
+  <pre>
+  {
+    &quot;name&quot;: &quot;Xyz Corporation&quot;,
+    &quot;email&quot;: &quot;<a data-fr-linked="true" href="mailto:xyz@example.com">xyz@example.com</a>&quot;,
+    &quot;phone&quot;: &quot;0987654321&quot;,
+    &quot;language&quot;: &quot;Spanish&quot;,
+    &quot;currency&quot;: &quot;EUR&quot;
+  }</pre>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>{
+    &quot;message&quot;: &quot;Provider 64ae9932a4f893aa79954553 updated successfully&quot;
+  }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+    curl -X PUT \
+    'http://127.0.0.1:8000/polygons/provider/64ae9932a4f893aa79954553' \
+    --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{
+      "name": "MNO Ltd",
+      "email": "mno@example.com",
+      "phone": "0123456789",
+      "language": "German",
+      "currency": "CAD"
+    }'</pre>
+  <p><br></p>
+  <p><strong>4.4) Delete a provider</strong></p>
+  <p><strong>Endpoint:</strong> /provider/{id}</p>
+  <p><strong>Method:</strong> DELETE</p>
+  <p><strong>Description:</strong> This route delete the provider&apos;s data.</p>
+  <p><strong>Parameters:</strong> {id} (path parameter): string - ID of the provider in the database.</p>
+  <p><strong>Request Body:</strong> None</p>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>
+  {
+    &quot;message&quot;: &quot;Provider 64ae9932a4f893aa79954553 deleted successfully&quot;
+  }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+  curl -X DELETE \
+  'http://127.0.0.1:8000/polygons/provider/64ae9964a4f893aa79954558' \
+  --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
+  <p><br></p>
+  <p><strong>4.5) Get service areas of a provider</strong></p>
+  <p><strong>Endpoint:</strong> /provider/service-areas/{id}</p>
+  <p><strong>Method:</strong> GET</p>
+  <p><strong>Description:</strong> This route returns all the service areas of the provider.</p>
+  <p><strong>Parameters:</strong> {id} (path parameter): string - ID of the provider in the database.</p>
+  <p><strong>Request Body:</strong> None</p>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200. Here is a proper
+    location to address one important trick about polygons. Take a careful look at the JSON response below. You will
+    realize that the first coordinate is equal to the last one. The reason for that is the nature of a polygon. Remember
+    that a polygon is made of straight lines that connect consecutive vertices. The good news is that Polygons API will
+    add automatically that closing coordinate, but if you save it by yourself, that&apos;s okay too.</p>
+  <pre>
+  [
+    {
+      &quot;_id&quot;: &quot;64b3160c947f1145c5a070b9&quot;,
+      &quot;name&quot;: &quot;East Village&quot;,
+      &quot;price&quot;: 28.44,
+      &quot;vertices&quot;: {
+        &quot;type&quot;: &quot;Polygon&quot;,
+        &quot;coordinates&quot;: [[
+          [ -73.9889,40.7306],
+          [ -73.9826,40.7306],
+          [-73.9826,40.7234],
+          [-73.9889,40.7234],
+          [-73.9889,40.7306]
+        ]]
+      },
+      &quot;provider&quot;: &quot;64ae9932a4f893aa79954553&quot;
+    },
+    { 
+      &quot;_id&quot;: &quot;64b316cd947f1145c5a070be&quot;,
+      &quot;name&quot;: &quot;Morningside Heights&quot;,
+      &quot;price&quot;: 18.34,
+      &quot;vertices&quot;: {
+        &quot;type&quot;: &quot;Polygon&quot;,
+        &quot;coordinates&quot;: [[
+          [ -73.9681, 40.8177],
+          [-73.9586,40.8177],
+          [-73.9586,40.8097],
+          [-73.9681,40.8097],
+          [-73.9681,40.8177]
+        ]]
+      },
+      &quot;provider&quot;: &quot;64ae9932a4f893aa79954553
+    }
+  ]</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+  curl -X GET \
+  'http://127.0.0.1:8000/polygons/provider/service-areas/64ae9932a4f893aa79954553' \
+  --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
+  <p><br></p>
+  <p><strong>4.6) Delete service areas of a provider</strong></p>
+  <p><strong>Endpoint:</strong> /provider/service-areas/{id}</p>
+  <p><strong>Method:</strong> DELETE</p>
+  <p><strong>Description:</strong> This route deletes all the service areas of the provider.</p>
+  <p><strong>Parameters:</strong> {id} (path parameter): string - ID of the provider in the database.</p>
+  <p><strong>Request Body:</strong> None</p>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>
+    {
+      &quot;message&quot;: &quot;Service areas from provider 64ae9932a4f893aa79954553 deleted successfully&quot;
+    }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+  curl -X DELETE \
+  'http://127.0.0.1:8000/polygons/provider/service-areas/64ae9932a4f893aa79954553' \
+  --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
+  <p><br></p>
+  <p><strong>4.7) Create a service area</strong></p>
+  <p><strong>Endpoint:</strong> /service-area</p>
+  <p><strong>Method:</strong> POST</p>
+  <p><strong>Description:</strong> This route creates a new service area (polygon).</p>
+  <p><strong>Parameters:</strong> None</p>
+  <p><strong>Request Body:</strong> A JSON Literal containing the required fields.</p>
+  <pre>{
+    &quot;name&quot;: &quot;East Village&quot;,
+    &quot;price&quot;: 28.44,
+    &quot;vertices&quot;: {
+      &quot;type&quot;: &quot;Polygon&quot;,
+        &quot;coordinates&quot;: [[
+          [-73.9889,40.7306],
+          [-73.9826,40.7306],
+          [-73.9826,40.7234],
+          [-73.9889,40.7234],
+          [-73.9889,40.7306]
+        ]]
+     },
+     &quot;provider&quot;: &quot;64ae9932a4f893aa79954553&quot;
+  }</pre>
+  <p>Note: When entering coordinate data relating to geo location, always enter in sequence: longitude, latitude.
+    It&apos;s a common mistake to invert this order. If float values above or below the range permitted for longitude and
+    latitude is entered, the API will return a error message alerting the client. Longitude can be any float number
+    between -180.0000 to 180.0000 and Latitude can be any float number between -45.0000 to 45.0000. Pay attention on the
+    decimal part of the float. Geo location coordinates demands 4 digits, at least, for good precision.&nbsp;</p>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>
+  {
+    &quot;message&quot;: &quot;Service area created successfully&quot;,
+    &quot;id&quot;: &quot;64b3160c947f1145c5a070b9&quot;
+  }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+  curl -X POST \
+  'http://127.0.0.1:8000/polygons/service-area' \
+  --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+  "name": "Tribeca",
+  "price": 20.30,
+  "vertices": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-74.01599, 40.7161], 
+      [-74.0055, 40.7161], 
+      [-74.0055, 40.7103], 
+      [-74.0159, 40.7103], 
+      [-74.0159, 40.7161]
+    ]]
+  },
+  "provider": "64ae995aa4f893aa79954557"
+  }'</pre>
+  <p><br></p>
+  <p><strong>4.8) Get a service area</strong></p>
+  <p><strong>Endpoint:</strong> /service-area/{id}</p>
+  <p><strong>Method:</strong> GET</p>
+  <p><strong>Description:</strong> This route returns information about the service area.</p>
+  <p><strong>Parameters:</strong> {id} (path parameter): string - ID of the service area in the database.</p>
+  <p><strong>Request Body:</strong> None</p>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>
+  {
+    &quot;_id&quot;: &quot;64b3160c947f1145c5a070b9&quot;,<br>  &quot;name&quot;: &quot;East Village&quot;,
+    &quot;price&quot;: 28.44,
+    &quot;vertices&quot;: {
+      &quot;type&quot;: &quot;Polygon&quot;,
+      &quot;coordinates&quot;: [[
+        [ -73.9889,40.7306],
+        [ -73.9826,40.7306],
+        [-73.9826,40.7234],
+        [-73.9889,40.7234],
+        [-73.9889,40.7306]
+      ]]
+    },
+    &quot;provider&quot;: &quot;64ae9932a4f893aa79954553&quot;
+  }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+    curl -X GET \
+    'http://127.0.0.1:8000/polygons/service-area/64b3160c947f1145c5a070b9' \
+    --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
+  <p><br></p>
+  <p><strong>4.9) Update a service area</strong></p>
+  <p><strong>Endpoint:</strong> /service-area/{id}</p>
+  <p><strong>Method:</strong> PUT</p>
+  <p><strong>Description:</strong> This route update the service area&apos;s data.</p>
+  <p><strong>Parameters:</strong> {id} (path parameter): string - ID of the service area in the database.</p>
+  <p><strong>Request Body:</strong> A JSON Literal containing the required fields.</p>
+  <pre>
+  {
+    &quot;name&quot;: &quot;East Village&quot;,<br>  &quot;price&quot;: 28.44,
+    &quot;vertices&quot;: {
+      &quot;type&quot;: &quot;Polygon&quot;,
+      &quot;coordinates&quot;: [[
+        [ -73.9889,40.7306],
+        [ -73.9826,40.7306],
+        [-73.9826,40.7234],
+        [-73.9889,40.7234],
+        [-73.9889,40.7306]
+      ]]
+    },
+    &quot;provider&quot;: &quot;64ae9932a4f893aa79954553&quot;
+  }</pre>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>
+  {
+    &quot;message&quot;: &quot;Service area 64b3160c947f1145c5a070b9 updated successfully&quot;
+  }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+    curl -X PUT \
+      'http://127.0.0.1:8000/polygons/service-area/64b316ac947f1145c5a070bd' \
+      --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS' \
+      --header 'Content-Type: application/json' \
+      --data-raw '{
+        "name": "Tribeca",
+        "price": 23.55,
+        "vertices": {
+          "type": "Polygon",
+          "coordinates": [[
+            [-74.0159,40.7161],
+            [-74.0055,40.7161],
+            [-74.0055,40.7103],
+            [-74.0159,40.7103],
+            [-74.0159,40.7161]
+          ]]
+        },
+        "provider": "64ae9932a4f893aa79954553"
+      }'</pre>
+  <p><br></p>
+  <p><strong>4.10) Delete a service area</strong></p>
+  <p><strong>Endpoint:</strong> /service-area/{id}</p>
+  <p><strong>Method:</strong> DELETE</p>
+  <p><strong>Description:</strong> This route delete the service area&apos;s data.</p>
+  <p><strong>Parameters:</strong> {id} (path parameter): string - ID of the service area in the database.</p>
+  <p><strong>Request Body:</strong> None</p>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>
+  {
+    &quot;message&quot;: &quot;Service area 64b3160c947f1145c5a070b9 deleted successfully&quot;
+  }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <pre>
+  curl -X DELETE \
+  'http://127.0.0.1:8000/polygons/service-area/64b316ac947f1145c5a070bd' \
+  --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
+  <p><br></p>
+  <p><strong>4.11) Get all service areas which contains a given coordinate (point)</strong></p>
+  <p><strong>Endpoint:</strong> /polygons/lookup</p>
+  <p><strong>Method:</strong> GET</p>
+  <p><strong>Description:</strong> This route returns information about all service areas which contains a given
+    coordinate.</p>
+  <p><strong>Parameters:</strong>&nbsp;</p>
+  <pre>
+  longitude (query parameter): float - geo coordinate of the longitude.
+  Can be any float number between -180.0000 to 180.0000
+
+  latitude (query parameter): float - geo coordinate of the latitude.
+  Can be any float number between -45.0000 to 45.0000</pre>
+  <p>Note: When entering coordinate data relating to geo location, always enter in sequence: longitude, latitude.
+    It&apos;s a common mistake to invert this order. If float values above or below the range permitted for longitude and
+    latitude is entered, the API will return a error message alerting the client. Pay attention on the decimal part of the
+    float. Geo location coordinates demands 4 digits, at least, for good precision.</p>
+  <p><strong>Request Body:</strong> None</p>
+  <p><strong>Request Headers:&nbsp;</strong></p>
+  <pre>api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS</pre>
+  <p><strong>Response:</strong> A JSON Literal containing the response message if HTTP Status 200.</p>
+  <pre>{
+    {
+      &quot;name&quot;: &quot;Tribeca&quot;,
+      &quot;provider&quot;: &quot;EFG Co.&quot;,
+      &quot;price&quot;: 28.33
+    },
+    {
+      &quot;name&quot;: &quot;Tribeca&quot;,
+      &quot;provider&quot;: &quot;Xyz Corporation&quot;,
+      &quot;price&quot;: 20.3
+    },
+    {
+      &quot;name&quot;: &quot;Tribeca&quot;,
+      &quot;provider&quot;: &quot;JKL Solutions&quot;,
+      &quot;price&quot;: 20.3
+    }
+  }</pre>
+  <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
+  <p><strong>Example in Curl:</strong></p>
+  <pre>
+  curl -X GET \
+  'http://127.0.0.1:8000/polygons/lookup?longitude=-74.0159&latitude=40.7161' \
+  --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
+  <p><br></p>
+  <h2>5) Error Handling</h2>
+  <p>Error responses follow the standard HTTP status codes. Common error codes include:</p>
+  <pre>
+  400 Bad Request: Invalid request or missing required parameters.
+  401 Unauthorized: Missing or invalid API key.
+  404 Not Found: Task not found.
+  500 Internal Server Error: An unexpected error occurred.
+  and more...</pre>
+  <p><br></p>
+  <h2>6) Rate Limiting</h2>
+  <p>The API imposes a rate limit of 100 requests per minute per API key. If the rate limit is exceeded, a 429 Too Many
+    Requests response will be returned.</p>
+  <p><br></p>
+  <h2>7) Best Practices</h2>
+  <ul>
+    <li>Always include the API-Key header in your requests to authenticate.</li>
+    <li>Use appropriate HTTP methods for each operation (e.g., POST for creating, PUT for updating).</li>
+    <li>Follow the naming conventions and guidelines mentioned in the documentation.</li>
+    <li>Handle error responses gracefully and display meaningful error messages to the user.</li>
+  </ul>
+  <p><br></p>
+  <h2>8) Versioning</h2>
+  <p>The API currently follows version 1 (v1) of the Task Manager API. Any future changes or additions will be reflected
+    in subsequent versions.</p>
+  <p><br></p>
+  <h2>9) Change Log</h2>
+  <p>v1.0.0 (2023-07-16): &nbsp;Initial release of the API.</p>
+  <p><br></p>
+  <h2>10) Support and Contact Information</h2>
+  <p>For any questions or issues, please contact developer@currency-calculator.space.</p>
+  
+</body>
+</html>

@@ -1,21 +1,48 @@
 from flask import request
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 from marshmallow import ValidationError
 from mongoengine.errors import ValidationError, DoesNotExist
-from models import Provider, ServiceArea
-from utils import Utils
-import json
+from modules.models import Provider, ServiceArea
+from modules.utils import Utils
+from decorators.apikeyrequired import api_key_required
+import json, redis
+from appconfig import env
 
+# Redis connection
+r = redis.Redis(host=env['redis_host'], port=6379, db=0)
+
+# Provider Controller
 class ProviderResource(Resource):
+    @api_key_required
     def get(self, provider_id):
+        # Check if the data is already cached
+        # If so, return the cached data
+        # Otherwise, retrieve the data from the database
+        # If error occurs, bypass the cache
         try:
+            cached_data = r.get(provider_id)
+            if cached_data:
+                return json.loads(cached_data)
+        except:
+            pass
+        
+        try:
+            # Retrieve the provider from the database
             provider = Provider.objects.get(id=provider_id)
+            # Cache the result for future requests
+            # Set expiration time to 1 hour
+            # If error occurs, bypass the cache
+            try:
+                r.setex(provider_id, env['redis_ttl'], provider.to_json())
+            except:
+                pass
             return json.loads(provider.to_json())
         except DoesNotExist:
             return {'error': 'Provider ' + provider_id + ' does not exist'}, 404
         except Exception as e:
             return {'error': str(e)}, 404
 
+    @api_key_required
     def post(self):
         # Intercept payload
         data = request.get_json()
@@ -53,6 +80,7 @@ class ProviderResource(Resource):
         except Exception as e:
             return {'error': str(e)}, 404
 
+    @api_key_required
     def put(self, provider_id):
         # Intercept payload
         data = request.get_json()
@@ -75,12 +103,20 @@ class ProviderResource(Resource):
 
         try:
             Provider.objects(id=provider_id).update_one(**data)
+            # Cache the result for future requests
+            # Set expiration time to 1 hour
+            # If error occurs, bypass the cache
+            try:
+                r.setex(provider_id, env['redis_ttl'], json.dumps(data))
+            except:
+                pass
             return {'message': 'Provider ' + provider_id + ' updated successfully'}
         except ValidationError as e:
             return {'error': str(e)}, 400
         except Exception as e:
             return {'error': str(e)}, 404
 
+    @api_key_required
     def delete(self, provider_id):
         try:
             provider = Provider.objects.get(id=provider_id)
@@ -91,21 +127,46 @@ class ProviderResource(Resource):
 
         try:
             Provider.objects(id=provider_id).delete()
+            # Delete the key from cache
+            try:
+                r.delete(provider_id)
+            except:
+                pass
             return {'message': 'Provider ' + provider_id + ' deleted successfully'}
         except Exception as e:
             return {'error': str(e)}, 404
 
-
+# Service Area Controller
 class ServiceAreaResource(Resource):
+    @api_key_required
     def get(self, service_area_id):
+        # Check if the data is already cached
+        # If so, return the cached data
+        # Otherwise, retrieve the data from the database
+        # If error occurs, bypass the cache
+        try:
+            cached_data = r.get(service_area_id)
+            if cached_data:
+                return json.loads(cached_data)
+        except:
+            pass
+        
         try:
             service_area = ServiceArea.objects.get(id=service_area_id)
+            # Cache the result for future requests
+            # Set expiration time to 1 hour
+            # If error occurs, bypass the cache
+            try:
+                r.setex(service_area_id, env['redis_ttl'], service_area.to_json())
+            except:
+                pass
             return json.loads(service_area.to_json())
         except DoesNotExist:
             return {'error': 'Service Area ' + service_area_id + ' does not exist'}, 404
         except Exception as e:
             return {'error': str(e)}, 404
 
+    @api_key_required
     def post(self):
         # Intercept payload
         data = request.get_json()
@@ -140,6 +201,7 @@ class ServiceAreaResource(Resource):
         except Exception as e:
             return {'error': str(e)}, 404
 
+    @api_key_required
     def put(self, service_area_id):
         # Intercept payload
         data = request.get_json()
@@ -178,21 +240,35 @@ class ServiceAreaResource(Resource):
         polygon_lookup = PolygonLookupResource()
         result = polygon_lookup.findPolygonProvider(data['vertices']['coordinates'], data['provider'])
         if len(result):
-            if result[0].provider.id != service_area_id:
-                if result[0].provider.id == data['provider']:
+            if str(result[0].id) != str(service_area_id):
+                if str(result[0].provider.id) == str(data['provider']):
                     return {'error': 'Polygon already exists for the provider'}, 400
         
         try:
             ServiceArea.objects(id=service_area_id).update_one(**data)
+            # Cache the result for future requests
+            # Set expiration time to 1 hour
+            # If error occurs, bypass the cache
+            try:
+                data['provider'] = str(data['provider'])
+                r.setex(service_area_id, env['redis_ttl'], json.dumps(data))
+            except:
+                pass
             return {'message': 'Service Area ' + service_area_id + ' updated successfully'}
         except ValidationError as e:
             return {'error': str(e)}, 400
         except Exception as e:
             return {'error': str(e)}, 404
 
+    @api_key_required
     def delete(self, service_area_id):
         try:
             service_area = ServiceArea.objects.get(id=service_area_id)
+            # Delete the key from cache
+            try:
+                r.delete(service_area_id)
+            except:
+                pass
         except DoesNotExist:
             return {'error': 'Service Area ' + service_area_id + ' does not exist'}, 404
         except Exception as e:
@@ -204,18 +280,26 @@ class ServiceAreaResource(Resource):
         except Exception as e:
             return {'error': str(e)}, 404
 
+# Provider Service Areas Controller
 class ProviderServicesAreasResource(Resource):
     # Get all service areas from a provider
+    @api_key_required
     def get(self, provider_id):
         try:
-            service_areas = ServiceArea.objects(provider=provider_id)
-            return json.loads(service_areas.to_json())
+            service_areas = ServiceArea.objects(provider=provider_id).limit(1000)
+            # Convert the ServiceArea objects to JSON using to_json() method
+            documents = []
+            for service_area in service_areas:
+                json_data = service_area.to_json()
+                documents.append(json.loads(json_data))
+            return documents
         except DoesNotExist:
             return {'error': 'Provider ' + provider_id + ' does not exist'}, 404
         except Exception as e:
             return {'error': str(e)}, 404
     
     # Delete all service areas from a provider    
+    @api_key_required
     def delete(self, provider_id):
         try:
             Provider.objects.get(id=provider_id)
@@ -233,24 +317,28 @@ class ProviderServicesAreasResource(Resource):
         except Exception as e:
             return {'error': str(e)}, 404
 
+# Polygon Lookup Controller
 class PolygonLookupResource(Resource):
     # Search for the polygon that matches the coordinates
     def findPolygonProvider(self, coordinates, provider_id):
         return ServiceArea.objects(vertices__geo_within=coordinates, provider=provider_id)
     
     # Get all polygons that matches the coordinates
+    @api_key_required
     def get(self):
         # Intercept payload
         raw_args = request.args
         
         # Format coordinates to expected syntax
         try: 
-            lng = raw_args['lng'][:raw_args['lng'].index('.') + 5]
+            lng = raw_args['longitude']
+            lng = lng[:lng.index('.') + 5]
             lng = float(lng)
         except:
             return {'error': 'Longitude must be a valid geo coordinate: Ex: -73.9889'}, 404
         try:
-            lat = raw_args['lat'][:raw_args['lat'].index('.') + 5]
+            lat = raw_args['latitude']
+            lat = lat[:lat.index('.') + 5]
             lat = float(lat)
         except Exception as e:
             return {'error': 'Latitude must be a valid geo coordinate: Ex: 40.7306'}, 404
