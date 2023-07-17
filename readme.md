@@ -4,7 +4,7 @@
 The goal of this project is to develop a robust RESTful API to support shuttle companies in providing their services. One of the challenges faced by shuttle companies is the lack of precise location information, such as zip codes or cities they serve. To overcome this challenge, the project aims to introduce a solution that allows shuttle companies to define custom polygons as their service areas. This approach empowers shuttle company staff to independently define and modify their service areas, allowing them to attribute a fixed price to each polygon.
 
 ## API Documentation
-API Documentation is available at <a href="http://18.230.150.109/polygons" target="_blank">Link</a>
+API Documentation is available at <a href="http://18.230.150.109/polygons" target="_blank">http://18.230.150.109/polygons</a>
 
 ## Project Objectives
 
