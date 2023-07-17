@@ -1,6 +1,7 @@
 .venv
 .history
 .vscode
+__pycache__/
 appconfig.py
 env-activate
 global-bundle.pem
