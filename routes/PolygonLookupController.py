@@ -50,19 +50,21 @@ class PolygonLookupController(Resource):
             } 
         }
         
-        polygons = ServiceArea.objects(__raw__=raw_query).order_by('name')
+        #polygons = ServiceArea.objects(__raw__=raw_query).order_by('name')
         
         result = []
-        for polygon in polygons:
-            # Retrieve the associated provider information
-            #provider = Provider.objects.get(id=polygon.provider.id)
-            
-            # Append the result
-            result.append({
-                'name': polygon.name,
-                #'provider': provider.name,
-                'price': polygon.price
-            })
+        
+        try:
+            for polygon in polygons:
+                # Retrieve the associated provider information
+                #provider = Provider.objects.get(id=polygon.provider.id)
+                
+                # Append the result
+                result.append({
+                    'name': polygon.name,
+                    #'provider': provider.name,
+                    'price': polygon.price
+                })
 
         return result
 
