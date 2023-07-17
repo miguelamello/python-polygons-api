@@ -114,7 +114,7 @@ class ServiceAreaController(Resource):
         
         # Verify if the polygon already exists for the provider
         # Exit if already exists
-        polygon_lookup = PolygonLookupResource()
+        polygon_lookup = PolygonLookupController()
         result = polygon_lookup.findPolygonProvider(data['vertices']['coordinates'], data['provider'])
         if len(result):
             if str(result[0].id) != str(service_area_id):
