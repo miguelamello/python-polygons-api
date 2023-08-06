@@ -28,7 +28,7 @@ def index():
     return ''
 
 # Redirect to API documentation
-@app.route("/polygons")
+@app.route("/polygons") 
 def redirect_to():
     return redirect(url_for('app_doc'))
 
