@@ -6,7 +6,7 @@ The goal of this project is to develop a robust RESTful API to support shuttle c
 
 ## API Documentation
 
-API Documentation is available at http://18.230.150.109/polygons
+API Documentation is available at http://18.230.150.109/polygons/v1
 
 ## Project Objectives
 

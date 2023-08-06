@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_mongoengine import MongoEngine
 from flask_restful import Resource, Api
 from functools import wraps
@@ -18,23 +18,22 @@ app.config['MONGODB_SETTINGS'] = { 'host': env['mongo_host'] }
 db = MongoEngine()
 db.init_app(app)
 api = Api(app)
-api.add_resource(ProviderController, '/polygons/provider', '/polygons/provider/<string:provider_id>')
-api.add_resource(ProviderServicesAreasController, '/polygons/provider/service-areas/<string:provider_id>')
-api.add_resource(ServiceAreaController, '/polygons/service-area', '/polygons/service-area/<string:service_area_id>')
-api.add_resource(PolygonLookupController, '/polygons/lookup')
-
-# Handler for unhandled exceptions
-'''@app.errorhandler(Exception)
-def handle_exception(e):
-    # Return the JSON response with the 500 status code
-    return jsonify(error=str(e)), 500'''
+api.add_resource(ProviderController, '/polygons/v1/provider', '/polygons/v1/provider/<string:provider_id>')
+api.add_resource(ProviderServicesAreasController, '/polygons/v1/provider/v1/service-areas/<string:provider_id>')
+api.add_resource(ServiceAreaController, '/polygons/v1/service-area', '/polygons/v1/service-area/<string:service_area_id>')
+api.add_resource(PolygonLookupController, '/polygons/v1/lookup')
 
 @app.route("/")
 def index():
     return ''
 
-# Route for API documentation
+# Redirect to API documentation
 @app.route("/polygons")
+def redirect_to():
+    return redirect(url_for('app_doc'))
+
+# Route for API documentation
+@app.route("/polygons/v1")
 def app_doc():
     return render_template("index.html")
 
