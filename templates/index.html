@@ -35,7 +35,7 @@
   <p><br></p>
   <h2>3) Base URL</h2>
   <p>Polygons API can be accessed through the base url below.<br><br></p>
-  <pre>http://18.230.150.109/polygons/v1</pre>
+  <pre>http://orionsoft.site/polygons/v1</pre>
   <p>Accessing the base url will show the API Documentation by default.</p>
   <p><br></p>
   <h2>4) Routes</h2>
@@ -80,7 +80,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
   curl -X POST \
-  'http://127.0.0.1:8000/polygons/provider' \
+  'http://127.0.0.1:8000/polygons/v1/provider' \
   --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS' \
   --header 'Content-Type: application/json' \
   --data-raw ' {
@@ -113,7 +113,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
     curl -X GET \
-    'http://127.0.0.1:8000/polygons/provider/64ae9932a4f893aa79954553' \
+    'http://127.0.0.1:8000/polygons/v1/provider/64ae9932a4f893aa79954553' \
     --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
   <p><br></p>
   <p><strong>4.3) Update a provider</strong></p>
@@ -140,7 +140,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
     curl -X PUT \
-    'http://127.0.0.1:8000/polygons/provider/64ae9932a4f893aa79954553' \
+    'http://127.0.0.1:8000/polygons/v1/provider/64ae9932a4f893aa79954553' \
     --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS' \
     --header 'Content-Type: application/json' \
     --data-raw '{
@@ -168,7 +168,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
   curl -X DELETE \
-  'http://127.0.0.1:8000/polygons/provider/64ae9964a4f893aa79954558' \
+  'http://127.0.0.1:8000/polygons/v1/provider/64ae9964a4f893aa79954558' \
   --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
   <p><br></p>
   <p><strong>4.5) Get service areas of a provider</strong></p>
@@ -223,7 +223,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
   curl -X GET \
-  'http://127.0.0.1:8000/polygons/provider/service-areas/64ae9932a4f893aa79954553' \
+  'http://127.0.0.1:8000/polygons/v1/provider/service-areas/64ae9932a4f893aa79954553' \
   --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
   <p><br></p>
   <p><strong>4.6) Delete service areas of a provider</strong></p>
@@ -243,7 +243,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
   curl -X DELETE \
-  'http://127.0.0.1:8000/polygons/provider/service-areas/64ae9932a4f893aa79954553' \
+  'http://127.0.0.1:8000/polygons/v1/provider/service-areas/64ae9932a4f893aa79954553' \
   --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
   <p><br></p>
   <p><strong>4.7) Create a service area</strong></p>
@@ -284,7 +284,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
   curl -X POST \
-  'http://127.0.0.1:8000/polygons/service-area' \
+  'http://127.0.0.1:8000/polygons/v1/service-area' \
   --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS' \
   --header 'Content-Type: application/json' \
   --data-raw '{
@@ -332,7 +332,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
     curl -X GET \
-    'http://127.0.0.1:8000/polygons/service-area/64b3160c947f1145c5a070b9' \
+    'http://127.0.0.1:8000/polygons/v1/service-area/64b3160c947f1145c5a070b9' \
     --header 'api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
   <p><br></p>
   <p><strong>4.9) Update a service area</strong></p>
@@ -367,7 +367,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
     curl -X PUT \
-      'http://127.0.0.1:8000/polygons/service-area/64b316ac947f1145c5a070bd' \
+      'http://127.0.0.1:8000/polygons/v1/service-area/64b316ac947f1145c5a070bd' \
       --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS' \
       --header 'Content-Type: application/json' \
       --data-raw '{
@@ -402,7 +402,7 @@
   <p>Note: If HTTP Status different from 200, then the response message will show the error information.</p>
   <pre>
   curl -X DELETE \
-  'http://127.0.0.1:8000/polygons/service-area/64b316ac947f1145c5a070bd' \
+  'http://127.0.0.1:8000/polygons/v1/service-area/64b316ac947f1145c5a070bd' \
   --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
   <p><br></p>
   <p><strong>4.11) Get all service areas which contains a given coordinate (point)</strong></p>
@@ -446,7 +446,7 @@
   <p><strong>Example in Curl:</strong></p>
   <pre>
   curl -X GET \
-  'http://127.0.0.1:8000/polygons/lookup?longitude=-74.0159&latitude=40.7161' \
+  'http://127.0.0.1:8000/polygons/v1/lookup?longitude=-74.0159&latitude=40.7161' \
   --header 'Api-key: BvAEfTYaVkHw06IR6l2WfEKJCpXOtMwS'</pre>
   <p><br></p>
   <h2>5) Error Handling</h2>
