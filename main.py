@@ -18,22 +18,18 @@ app.config['MONGODB_SETTINGS'] = { 'host': env['mongo_host'] }
 db = MongoEngine()
 db.init_app(app)
 api = Api(app)
-api.add_resource(ProviderController, '/polygons/v1/provider', '/polygons/v1/provider/<string:provider_id>')
-api.add_resource(ProviderServicesAreasController, '/polygons/v1/provider/v1/service-areas/<string:provider_id>')
-api.add_resource(ServiceAreaController, '/polygons/v1/service-area', '/polygons/v1/service-area/<string:service_area_id>')
-api.add_resource(PolygonLookupController, '/polygons/v1/lookup')
-
-@app.route("/")
-def index():
-    return ''
+api.add_resource(ProviderController, '/provider', '/provider/<string:provider_id>')
+api.add_resource(ProviderServicesAreasController, '/service-areas/<string:provider_id>')
+api.add_resource(ServiceAreaController, '/service-area', '/service-area/<string:service_area_id>')
+api.add_resource(PolygonLookupController, '/lookup')
 
 # Redirect to API documentation
-@app.route("/polygons") 
+@app.route("/") 
 def redirect_to():
     return redirect(url_for('app_doc'))
 
 # Route for API documentation
-@app.route("/polygons/v1")
+@app.route("/reference")
 def app_doc():
     return render_template("index.html")
 

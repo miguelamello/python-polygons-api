@@ -6,7 +6,7 @@ The goal of this project is to develop a robust RESTful API to support shuttle c
 
 ## API Documentation  
 
-API Documentation is available at http://orionsoft.site/polygons/v1
+API Documentation is available at http://polygons.orionsoft.site/reference
 
 ## Project Objectives
 

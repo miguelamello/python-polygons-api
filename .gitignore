@@ -2,6 +2,7 @@
 .vscode
 __pycache__/
 repos
-#appconfig.py
+project
+appconfig.py
 global-bundle.pem
 
