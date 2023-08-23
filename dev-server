@@ -1,4 +1,4 @@
-#!~/python-polygons-api/venv/bin/python
+#!/home/ec2-user/python-polygons-api/venv/bin/python
 export FLASK_APP=main.py
 export FLASK_ENV=development
 flask run --port 8000 --debugger
